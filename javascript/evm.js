@@ -1,15 +1,4 @@
-/**
- * EVM From Scratch
- * JavaScript template
- *
- * To work on EVM From Scratch in JavaScript:
- *
- * - Install Node.js: https://nodejs.org/en/download/
- * - Edit `javascript/evm.js` (this file!), see TODO below
- * - Run `node javascript/evm.js` to run the tests
- *
- * If you prefer TypeScript, there's a sample TypeScript template in the `typescript` directory.
- */
+const { executeOpCode } = require("./opcode.js");
 
 function evm(code) {
   let pc = 0;
@@ -17,9 +6,16 @@ function evm(code) {
 
   while (pc < code.length) {
     const opcode = code[pc];
+    // hault execute if encountered STOP
+    if (opcode === 0) {
+      break;
+    }
     pc++;
+    const args = code.slice(pc);
 
-    // TODO: implement the EVM here!
+    const response = executeOpCode(opcode, stack, args);
+    stack = response.stack;
+    pc += response.pc;
   }
 
   return { success: true, stack };
