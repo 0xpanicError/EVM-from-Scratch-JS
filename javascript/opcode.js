@@ -1,4 +1,13 @@
-const { addBigNum } = require("./lib/Math.js");
+const {
+  addHexNumbers,
+  multiplyHexNumbers,
+  subtractHexNumbers,
+  divideHexNumbers,
+  modHexNumbers,
+  addModHexNumbers,
+  mulModHexNumbers,
+  expHexNumbers,
+} = require("./lib/Math.js");
 
 function executeOpCode(opcode, stack, args) {
   opcode = opcode.toString(16);
@@ -84,11 +93,15 @@ function executeOpCode(opcode, stack, args) {
       return opcodeMOD(stack);
     case "0x08":
       return opcodeADDMOD(stack);
+    case "0x09":
+      return opcodeMULMOD(stack);
+    case "0x0a":
+      return opcodeEXP(stack);
   }
 }
 
 function opcodePUSH0(stack) {
-  stack.push(0);
+  stack.unshift(0);
   return { stack, pc: 0 };
 }
 
@@ -114,13 +127,8 @@ function opcodePOP(stack) {
 function opcodeADD(stack) {
   let num1 = stack.shift();
   let num2 = stack.shift();
-  let result = addBigNum(num1, num2);
+  let result = addHexNumbers(num1, num2);
 
-  // overflow logic
-  if (result.length > 64) {
-    result = result.slice(-64);
-    result = parseInt(result, 16).toString(16);
-  }
   stack.unshift(result);
   return { stack, pc: 0 };
 }
@@ -128,10 +136,8 @@ function opcodeADD(stack) {
 function opcodeMUL(stack) {
   let num1 = stack.shift();
   let num2 = stack.shift();
-  let result = (parseInt(num1, 16) * parseInt(num2, 16)).toString(16);
-  // overflow logic
-  if (result.length > 64)
-    result = "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe";
+  let result = multiplyHexNumbers(num1, num2);
+
   stack.unshift(result);
   return { stack, pc: 0 };
 }
@@ -139,10 +145,7 @@ function opcodeMUL(stack) {
 function opcodeSUB(stack) {
   let num1 = stack.shift();
   let num2 = stack.shift();
-  let result = (parseInt(num1, 16) - parseInt(num2, 16)).toString(16);
-  // overflow logic
-  if (parseInt(result, 16) < 0)
-    result = "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+  let result = subtractHexNumbers(num1, num2);
   stack.unshift(result);
   return { stack, pc: 0 };
 }
@@ -150,9 +153,7 @@ function opcodeSUB(stack) {
 function opcodeDIV(stack) {
   let num1 = stack.shift();
   let num2 = stack.shift();
-  let result = Math.floor(parseInt(num1, 16) / parseInt(num2, 16)).toString(16);
-  // divide by zero logic
-  if (parseInt(num2, 16) === 0) result = "0";
+  let result = divideHexNumbers(num1, num2);
   stack.unshift(result);
   return { stack, pc: 0 };
 }
@@ -160,17 +161,35 @@ function opcodeDIV(stack) {
 function opcodeMOD(stack) {
   let num1 = stack.shift();
   let num2 = stack.shift();
-  let result = (parseInt(num1, 16) % parseInt(num2, 16)).toString(16);
-  // divide by zero logic
-  if (parseInt(num2, 16) === 0) result = "0";
+  let result = modHexNumbers(num1, num2);
   stack.unshift(result);
   return { stack, pc: 0 };
 }
 
 function opcodeADDMOD(stack) {
-  const response = opcodeADD(stack);
-  stack = response.stack;
-  return opcodeMOD(stack);
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let num3 = stack.shift();
+  let result = addModHexNumbers(num1, num2, num3);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeMULMOD(stack) {
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let num3 = stack.shift();
+  let result = mulModHexNumbers(num1, num2, num3);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeEXP(stack) {
+  let pow = stack.shift();
+  let base = stack.shift();
+  let result = expHexNumbers(base, pow);
+  stack.unshift(result);
+  return { stack, pc: 0 };
 }
 
 module.exports = { executeOpCode };

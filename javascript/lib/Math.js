@@ -1,57 +1,172 @@
-function addBigNum(x, y) {
-  const num1 = x.lengt > y.length ? x : y;
-  let num2 = x.lengt > y.length ? y : x;
-  const ML = Math.max(x.length, y.length);
-  const diff = Math.abs(x.length - y.length);
-  let zeroString = "";
-  for (let i = 0; i < diff; i++) {
-    zeroString += "0";
+function addHexNumbers(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  const num1 = BigInt(`0x${hexNum1}`);
+  const num2 = BigInt(`0x${hexNum2}`);
+
+  // Add the numbers
+  let sum = num1 + num2;
+
+  // Overflow logic
+  if (sum > BigInt(2 ** 256)) {
+    sum = sum - BigInt(2 ** 256);
   }
-  num2 = zeroString + num2;
-  let carry = 0;
-  let result = "";
-  for (let i = ML - 1; i >= 0; i--) {
-    const val1 = parseInt(num1[i], 16);
-    const val2 = parseInt(num2[i], 16);
-    const ans = ((val1 + val2 + carry) % 16).toString(16);
-    carry = Math.floor((val1 + val2 + carry) / 16);
-    result = ans + result;
-  }
-  if (carry) result = "1" + result;
-  return result;
+
+  // Convert the sum back to a hexadecimal string
+  const hexSum = sum.toString(16);
+
+  return hexSum;
 }
 
-// function multiplyBigNum(x, y) {
-//   let num1 = x.length > y.length ? x : y;
-//   let num2 = x.length > y.length ? y : x;
-//   let subMul = [];
-//   let zeroCount = 0;
-//   for (let i = num2.length - 1; i >= 0; i--) {
-//     let carry = 0;
-//     let result = "";
-//     for (let j = num1.length - 1; j >= 0; j--) {
-//       const val1 = parseInt(num1[j], 16);
-//       const val2 = parseInt(num2[i], 16);
-//       const ans = ((val1 * val2 + carry) % 16).toString(16);
-//       carry = Math.floor((val1 * val2 + carry) / 16);
-//       result = ans + result;
-//     }
-//     let zeroString = "";
-//     for (let j = 0; j < zeroCount; i++) {
-//       zeroString += "0";
-//     }
-//     result = result + zeroString;
-//     zeroCount++;
-//     if (carry) result = carry.toString(16) + result;
-//     subMul.push(result);
-//   }
-//   let finalResult = subMul[0];
-//   for (let i = 1; i < subMul.length; i++) {
-//     finalResult = addBigNum(finalResult, subMul[i]);
-//   }
-//   return finalResult;
-// }
+function multiplyHexNumbers(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  const num1 = BigInt(`0x${hexNum1}`);
+  const num2 = BigInt(`0x${hexNum2}`);
 
-// console.log(multiplyBigNum("0x1ac25", "0x182ff"));
+  // Multiply the numbers
+  let product = num1 * num2;
 
-module.exports = { addBigNum };
+  // Overflow logic
+  if (product > BigInt(2 ** 256)) {
+    product = product % BigInt(2 ** 256);
+  }
+
+  // Convert the product back to a hexadecimal string
+  const hexProduct = product.toString(16);
+
+  return hexProduct;
+}
+
+function subtractHexNumbers(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  const num1 = BigInt(`0x${hexNum1}`);
+  const num2 = BigInt(`0x${hexNum2}`);
+
+  // Subtract the numbers
+  let difference = num1 - num2;
+
+  // Underflow logic
+  if (difference < 0) {
+    difference = difference + BigInt(2 ** 256);
+  }
+
+  // Convert the difference back to a hexadecimal string
+  const hexDifference = difference.toString(16);
+
+  return hexDifference;
+}
+
+function divideHexNumbers(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  const num1 = BigInt(`0x${hexNum1}`);
+  const num2 = BigInt(`0x${hexNum2}`);
+
+  let quotient;
+
+  // Divide by zero logic
+  if (num2 == 0) {
+    quotient = 0;
+  } else {
+    // Divide the numbers
+    quotient = num1 / num2;
+  }
+
+  // Convert the quotient back to a hexadecimal string
+  const hexQuotient = quotient.toString(16);
+
+  return hexQuotient;
+}
+
+function modHexNumbers(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  const num1 = BigInt(`0x${hexNum1}`);
+  const num2 = BigInt(`0x${hexNum2}`);
+
+  let remainder;
+
+  // Divide by zero logic
+  if (num2 == 0) {
+    remainder = 0;
+  } else {
+    // Get remainder of the numbers
+    remainder = num1 % num2;
+  }
+
+  // Convert the remainder back to a hexadecimal string
+  const hexRemainder = remainder.toString(16);
+
+  return hexRemainder;
+}
+
+function addModHexNumbers(hexNum1, hexNum2, hexNum3) {
+  // Convert the hexadecimal numbers to BigInt
+  const num1 = BigInt(`0x${hexNum1}`);
+  const num2 = BigInt(`0x${hexNum2}`);
+  const num3 = BigInt(`0x${hexNum3}`);
+
+  // Add the numbers
+  let sum = num1 + num2;
+
+  // Get the remainder of the sum and the third number
+  let remainder = sum % num3;
+
+  // Convert the remainder back to a hexadecimal string
+  const hexRemainder = remainder.toString(16);
+
+  return hexRemainder;
+}
+
+function mulModHexNumbers(hexNum1, hexNum2, hexNum3) {
+  // Convert the hexadecimal numbers to BigInt
+  const num1 = BigInt(`0x${hexNum1}`);
+  const num2 = BigInt(`0x${hexNum2}`);
+  const num3 = BigInt(`0x${hexNum3}`);
+
+  // Multiply the numbers
+  let product = num1 * num2;
+
+  // Get the remainder of the product and the third number
+  let remainder = product % num3;
+
+  // Convert the remainder back to a hexadecimal string
+  const hexRemainder = remainder.toString(16);
+
+  return hexRemainder;
+}
+
+function expHexNumbers(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  const num1 = BigInt(`0x${hexNum1}`);
+  const num2 = BigInt(`0x${hexNum2}`);
+
+  // Exponentiate the numbers
+  let power = num2 ** num1;
+
+  // Overflow logic
+  if (power > BigInt(2 ** 256)) {
+    power = power % BigInt(2 ** 256);
+  }
+
+  // Convert the power back to a hexadecimal string
+  const hexPower = power.toString(16);
+
+  return hexPower;
+}
+
+function unpadHexString(hexString) {
+  // Remove leading zeros
+  const unpaddedHexString = hexString.replace(/^0+/, "");
+
+  return unpaddedHexString;
+}
+
+module.exports = {
+  addHexNumbers,
+  multiplyHexNumbers,
+  subtractHexNumbers,
+  divideHexNumbers,
+  modHexNumbers,
+  addModHexNumbers,
+  mulModHexNumbers,
+  expHexNumbers,
+  unpadHexString,
+};
