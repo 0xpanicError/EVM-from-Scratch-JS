@@ -3,10 +3,13 @@ const {
   multiplyHexNumbers,
   subtractHexNumbers,
   divideHexNumbers,
+  sdivHexNumbers,
   modHexNumbers,
+  smodHexNumbers,
   addModHexNumbers,
   mulModHexNumbers,
   expHexNumbers,
+  signExtend,
 } = require("./lib/Math.js");
 
 function executeOpCode(opcode, stack, args) {
@@ -89,14 +92,20 @@ function executeOpCode(opcode, stack, args) {
       return opcodeSUB(stack);
     case "0x04":
       return opcodeDIV(stack);
+    case "0x05":
+      return opcodeSDIV(stack);
     case "0x06":
       return opcodeMOD(stack);
+    case "0x07":
+      return opcodeSMOD(stack);
     case "0x08":
       return opcodeADDMOD(stack);
     case "0x09":
       return opcodeMULMOD(stack);
     case "0x0a":
       return opcodeEXP(stack);
+    case "0x0b":
+      return opcodeSIGNEXTEND(stack);
   }
 }
 
@@ -158,10 +167,26 @@ function opcodeDIV(stack) {
   return { stack, pc: 0 };
 }
 
+function opcodeSDIV(stack) {
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let result = sdivHexNumbers(num1, num2);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
 function opcodeMOD(stack) {
   let num1 = stack.shift();
   let num2 = stack.shift();
   let result = modHexNumbers(num1, num2);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeSMOD(stack) {
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let result = smodHexNumbers(num1, num2);
   stack.unshift(result);
   return { stack, pc: 0 };
 }
@@ -188,6 +213,14 @@ function opcodeEXP(stack) {
   let pow = stack.shift();
   let base = stack.shift();
   let result = expHexNumbers(base, pow);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeSIGNEXTEND(stack) {
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let result = signExtend(num1, num2);
   stack.unshift(result);
   return { stack, pc: 0 };
 }
