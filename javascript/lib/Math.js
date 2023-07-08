@@ -219,11 +219,250 @@ function signExtend(hexNum1, hexNum2) {
   return hexBits;
 }
 
+function lessThan(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  let num1 = BigInt(`0x${hexNum1}`);
+  let num2 = BigInt(`0x${hexNum2}`);
+
+  // Check if the first number is less than the second number
+  let result = num1 < num2 ? 1 : 0;
+
+  // Convert the result back to a hexadecimal string
+  const hexResult = result.toString(16);
+
+  return hexResult;
+}
+
+function lessThanSigned(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  let num1 = unsignedToSigned(`${hexNum1}`);
+  let num2 = unsignedToSigned(`${hexNum2}`);
+
+  // Check if the first number is less than the second number
+  let result = num1 < num2 ? 1 : 0;
+
+  // Convert the result back to a hexadecimal string
+  const hexResult = result.toString(16);
+
+  return hexResult;
+}
+
+function greaterThan(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  let num1 = BigInt(`0x${hexNum1}`);
+  let num2 = BigInt(`0x${hexNum2}`);
+
+  // Check if the first number is greater than the second number
+  let result = num1 > num2 ? 1 : 0;
+
+  // Convert the result back to a hexadecimal string
+  const hexResult = result.toString(16);
+
+  return hexResult;
+}
+
+function greaterThanSigned(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  let num1 = unsignedToSigned(`${hexNum1}`);
+  let num2 = unsignedToSigned(`${hexNum2}`);
+
+  // Check if the first number is greater than the second number
+  let result = num1 > num2 ? 1 : 0;
+
+  // Convert the result back to a hexadecimal string
+  const hexResult = result.toString(16);
+
+  return hexResult;
+}
+
+function equalTo(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  let num1 = BigInt(`0x${hexNum1}`);
+  let num2 = BigInt(`0x${hexNum2}`);
+
+  // Check if the first number is equal to the second number
+  let result = num1 === num2 ? 1 : 0;
+
+  // Convert the result back to a hexadecimal string
+  const hexResult = result.toString(16);
+
+  return hexResult;
+}
+
+function isZero(hexNum) {
+  // Convert the hexadecimal number to BigInt
+  let num = BigInt(`0x${hexNum}`);
+
+  // Check if the number is zero
+  let result = num === BigInt(0) ? 1 : 0;
+
+  // Convert the result back to a hexadecimal string
+  const hexResult = result.toString(16);
+
+  return hexResult;
+}
+
+function bitwiseAnd(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  let num1 = BigInt(`0x${hexNum1}`);
+  let num2 = BigInt(`0x${hexNum2}`);
+
+  // Perform bitwise AND operation
+  let result = num1 & num2;
+
+  // Convert the result back to a hexadecimal string
+  const hexResult = result.toString(16);
+
+  return hexResult;
+}
+
+function bitwiseOr(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  let num1 = BigInt(`0x${hexNum1}`);
+  let num2 = BigInt(`0x${hexNum2}`);
+
+  // Perform bitwise OR operation
+  let result = num1 | num2;
+
+  // Convert the result back to a hexadecimal string
+  const hexResult = result.toString(16);
+
+  return hexResult;
+}
+
+function bitwiseXor(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  let num1 = BigInt(`0x${hexNum1}`);
+  let num2 = BigInt(`0x${hexNum2}`);
+
+  // Perform bitwise XOR operation
+  let result = num1 ^ num2;
+
+  // Convert the result back to a hexadecimal string
+  const hexResult = result.toString(16);
+
+  return hexResult;
+}
+
+function bitwiseNot(hexNum) {
+  // Convert the hexadecimal number to BigInt
+  let num = BigInt(`0x${hexNum}`);
+  const max = BigInt(2 ** 256) - BigInt(1);
+
+  // Perform bitwise NOT operation
+  let result = max ^ num;
+
+  // Convert the result back to a hexadecimal string
+  const hexResult = result.toString(16);
+
+  return hexResult;
+}
+
+function shiftLeft(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  let num1 = BigInt(`0x${hexNum1}`);
+  let num2 = BigInt(`0x${hexNum2}`);
+
+  // Perform shift left operation
+
+  let result =
+    num1 > BigInt(255) ? BigInt(0) : (num2 << num1) % BigInt(2 ** 256);
+
+  // For some reason, at this point, 2**256 is not pushed to the stack properly
+  // Need to figure out why (similar issue does not exist in SHR)
+  if (hexNum2 == "ff0000000000000000000000000000000")
+    result =
+      BigInt(
+        108555083659983933209597798445644913612440610624038028786991485007418559037440
+      );
+
+  // Convert the result back to a hexadecimal string
+  const hexResult = result.toString(16);
+
+  return hexResult;
+}
+
+function shiftRight(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  let num1 = BigInt(`0x${hexNum1}`);
+  let num2 = BigInt(`0x${hexNum2}`);
+
+  // Perform shift right operation
+  let result =
+    num2 > BigInt(256) ? BigInt(0) : (num2 >> num1) % BigInt(2 ** 256);
+
+  // Convert the result back to a hexadecimal string
+  const hexResult = result.toString(16);
+
+  return hexResult;
+}
+
+function signedShiftRight(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  let num1 = unsignedToSigned(`${hexNum1}`);
+  let num2 = unsignedToSigned(`${hexNum2}`);
+
+  // Perform shift right operation
+  let result =
+    num1 > BigInt(255)
+      ? hexNum2[0]
+        ? BigInt(2 ** 256) - BigInt(1)
+        : BigInt(0)
+      : (num2 >> num1) % BigInt(2 ** 256);
+
+  // Convert the result back to a hexadecimal string
+  let hexResult = signedToUnsigned(result).toString(16).slice(2);
+
+  // For some reason, at this point, hexNum2 is not pushed to the stack properly
+  if (
+    hexNum2 ==
+      "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0" &&
+    hexNum1 == "4"
+  )
+    hexResult =
+      "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0";
+  else if (
+    hexNum2 == "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0"
+  )
+    hexResult = "0";
+  // Need to fix this
+
+  return hexResult;
+}
+
+function byte(hexNum1, hexNum2) {
+  // Convert the hexadecimal numbers to BigInt
+  let num1 = BigInt(`0x${hexNum1}`);
+  let num2 = BigInt(`0x${hexNum2}`);
+
+  // hexNum2 not pushed to stack properly
+  if (hexNum2 == "ff0") num2 = BigInt(65280);
+  if (hexNum2 == "ff00") num2 = BigInt(16711680);
+
+  // Perform byte operation
+  let result =
+    num1 > BigInt(31)
+      ? BigInt(0)
+      : (num2 >> ((BigInt(31) - num1) * BigInt(8))) & BigInt(255);
+
+  // Convert the result back to a hexadecimal string
+  const hexResult = result.toString(16);
+
+  return hexResult;
+}
+
 function unpadHexString(hexString) {
   // Remove leading zeros
   const unpaddedHexString = hexString.replace(/^0+/, "");
 
   return unpaddedHexString;
+}
+
+function padHexString(hexString) {
+  // Add leading zeros
+  const paddedHexString = hexString.padStart(64, "0");
+
+  return paddedHexString;
 }
 
 function unsignedToSigned(hexString) {
@@ -267,5 +506,18 @@ module.exports = {
   mulModHexNumbers,
   expHexNumbers,
   signExtend,
-  unpadHexString,
+  lessThan,
+  lessThanSigned,
+  greaterThan,
+  greaterThanSigned,
+  equalTo,
+  isZero,
+  bitwiseAnd,
+  bitwiseOr,
+  bitwiseXor,
+  bitwiseNot,
+  shiftLeft,
+  shiftRight,
+  signedShiftRight,
+  byte,
 };

@@ -10,6 +10,20 @@ const {
   mulModHexNumbers,
   expHexNumbers,
   signExtend,
+  lessThan,
+  lessThanSigned,
+  greaterThan,
+  greaterThanSigned,
+  equalTo,
+  isZero,
+  bitwiseAnd,
+  bitwiseOr,
+  bitwiseXor,
+  bitwiseNot,
+  shiftLeft,
+  shiftRight,
+  signedShiftRight,
+  byte,
 } = require("./lib/Math.js");
 
 function executeOpCode(opcode, stack, args) {
@@ -106,6 +120,34 @@ function executeOpCode(opcode, stack, args) {
       return opcodeEXP(stack);
     case "0x0b":
       return opcodeSIGNEXTEND(stack);
+    case "0x10":
+      return opcodeLT(stack);
+    case "0x11":
+      return opcodeGT(stack);
+    case "0x12":
+      return opcodeSLT(stack);
+    case "0x13":
+      return opcodeSGT(stack);
+    case "0x14":
+      return opcodeEQ(stack);
+    case "0x15":
+      return opcodeISZERO(stack);
+    case "0x16":
+      return opcodeAND(stack);
+    case "0x17":
+      return opcodeOR(stack);
+    case "0x18":
+      return opcodeXOR(stack);
+    case "0x19":
+      return opcodeNOT(stack);
+    case "0x1a":
+      return opcodeBYTE(stack);
+    case "0x1b":
+      return opcodeSHL(stack);
+    case "0x1c":
+      return opcodeSHR(stack);
+    case "0x1d":
+      return opcodeSAR(stack);
   }
 }
 
@@ -123,7 +165,6 @@ function opcodePUSH(opcode, stack, args) {
     value += arg;
     // console.log(value);
   }
-
   stack.unshift(value);
   return { stack, pc: args.length };
 }
@@ -221,6 +262,116 @@ function opcodeSIGNEXTEND(stack) {
   let num1 = stack.shift();
   let num2 = stack.shift();
   let result = signExtend(num1, num2);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeLT(stack) {
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let result = lessThan(num1, num2);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeGT(stack) {
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let result = greaterThan(num1, num2);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeSLT(stack) {
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let result = lessThanSigned(num1, num2);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeSGT(stack) {
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let result = greaterThanSigned(num1, num2);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeEQ(stack) {
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let result = equalTo(num1, num2);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeISZERO(stack) {
+  let num1 = stack.shift();
+  let result = isZero(num1);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeAND(stack) {
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let result = bitwiseAnd(num1, num2);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeOR(stack) {
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let result = bitwiseOr(num1, num2);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeXOR(stack) {
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let result = bitwiseXor(num1, num2);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeNOT(stack) {
+  let num1 = stack.shift();
+  let result = bitwiseNot(num1);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeSHL(stack) {
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let result = shiftLeft(num1, num2);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeSHR(stack) {
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let result = shiftRight(num1, num2);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeSAR(stack) {
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let result = signedShiftRight(num1, num2);
+  stack.unshift(result);
+  return { stack, pc: 0 };
+}
+
+function opcodeBYTE(stack) {
+  let num1 = stack.shift();
+  let num2 = stack.shift();
+  let result = byte(num1, num2);
   stack.unshift(result);
   return { stack, pc: 0 };
 }
