@@ -3,11 +3,17 @@ const { executeOpCode } = require("./opcode.js");
 function evm(code) {
   let pc = 0;
   let stack = [];
+  let success = true;
 
   while (pc < code.length) {
     const opcode = code[pc];
     // hault execute if encountered STOP
     if (opcode === 0) {
+      break;
+    }
+    // return success false if encountered INVALID
+    if (opcode === 0xfe) {
+      success = false;
       break;
     }
     pc++;
@@ -18,7 +24,7 @@ function evm(code) {
     pc += response.pc;
   }
 
-  return { success: true, stack };
+  return { success: success, stack };
 }
 
 function tests() {

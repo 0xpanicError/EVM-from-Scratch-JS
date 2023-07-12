@@ -148,6 +148,70 @@ function executeOpCode(opcode, stack, args) {
       return opcodeSHR(stack);
     case "0x1d":
       return opcodeSAR(stack);
+    case "0x80":
+      return upcodeDUP(opcode, stack);
+    case "0x81":
+      return upcodeDUP(opcode, stack);
+    case "0x82":
+      return upcodeDUP(opcode, stack);
+    case "0x83":
+      return upcodeDUP(opcode, stack);
+    case "0x84":
+      return upcodeDUP(opcode, stack);
+    case "0x85":
+      return upcodeDUP(opcode, stack);
+    case "0x86":
+      return upcodeDUP(opcode, stack);
+    case "0x87":
+      return upcodeDUP(opcode, stack);
+    case "0x88":
+      return upcodeDUP(opcode, stack);
+    case "0x89":
+      return upcodeDUP(opcode, stack);
+    case "0x8a":
+      return upcodeDUP(opcode, stack);
+    case "0x8b":
+      return upcodeDUP(opcode, stack);
+    case "0x8c":
+      return upcodeDUP(opcode, stack);
+    case "0x8d":
+      return upcodeDUP(opcode, stack);
+    case "0x8e":
+      return upcodeDUP(opcode, stack);
+    case "0x8f":
+      return upcodeDUP(opcode, stack);
+    case "0x90":
+      return upcodeSWAP(opcode, stack);
+    case "0x91":
+      return upcodeSWAP(opcode, stack);
+    case "0x92":
+      return upcodeSWAP(opcode, stack);
+    case "0x93":
+      return upcodeSWAP(opcode, stack);
+    case "0x94":
+      return upcodeSWAP(opcode, stack);
+    case "0x95":
+      return upcodeSWAP(opcode, stack);
+    case "0x96":
+      return upcodeSWAP(opcode, stack);
+    case "0x97":
+      return upcodeSWAP(opcode, stack);
+    case "0x98":
+      return upcodeSWAP(opcode, stack);
+    case "0x99":
+      return upcodeSWAP(opcode, stack);
+    case "0x9a":
+      return upcodeSWAP(opcode, stack);
+    case "0x9b":
+      return upcodeSWAP(opcode, stack);
+    case "0x9c":
+      return upcodeSWAP(opcode, stack);
+    case "0x9d":
+      return upcodeSWAP(opcode, stack);
+    case "0x9e":
+      return upcodeSWAP(opcode, stack);
+    case "0x9f":
+      return upcodeSWAP(opcode, stack);
   }
 }
 
@@ -171,6 +235,22 @@ function opcodePUSH(opcode, stack, args) {
 
 function opcodePOP(stack) {
   stack.shift();
+  return { stack, pc: 0 };
+}
+
+function upcodeDUP(opcode, stack) {
+  const stackPointer = Number(opcode) - 128;
+  let value = stack[stackPointer];
+  stack.unshift(value);
+  return { stack, pc: 0 };
+}
+
+function upcodeSWAP(opcode, stack) {
+  const stackPointer = Number(opcode) - 143;
+  let num1 = stack[0];
+  let num2 = stack[stackPointer];
+  stack[stackPointer] = num1;
+  stack[0] = num2;
   return { stack, pc: 0 };
 }
 
