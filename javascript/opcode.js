@@ -212,12 +212,14 @@ function executeOpCode(opcode, stack, args) {
       return upcodeSWAP(opcode, stack);
     case "0x9f":
       return upcodeSWAP(opcode, stack);
+    case "0x5a":
+      return opcodeGAS(stack);
   }
 }
 
 function opcodePUSH0(stack) {
   stack.unshift(0);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodePUSH(opcode, stack, args) {
@@ -230,19 +232,19 @@ function opcodePUSH(opcode, stack, args) {
     // console.log(value);
   }
   stack.unshift(value);
-  return { stack, pc: args.length };
+  return { stack, pc: args.length + 1 };
 }
 
 function opcodePOP(stack) {
   stack.shift();
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function upcodeDUP(opcode, stack) {
   const stackPointer = Number(opcode) - 128;
   let value = stack[stackPointer];
   stack.unshift(value);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function upcodeSWAP(opcode, stack) {
@@ -251,7 +253,7 @@ function upcodeSWAP(opcode, stack) {
   let num2 = stack[stackPointer];
   stack[stackPointer] = num1;
   stack[0] = num2;
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeADD(stack) {
@@ -260,7 +262,7 @@ function opcodeADD(stack) {
   let result = addHexNumbers(num1, num2);
 
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeMUL(stack) {
@@ -269,7 +271,7 @@ function opcodeMUL(stack) {
   let result = multiplyHexNumbers(num1, num2);
 
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeSUB(stack) {
@@ -277,7 +279,7 @@ function opcodeSUB(stack) {
   let num2 = stack.shift();
   let result = subtractHexNumbers(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeDIV(stack) {
@@ -285,7 +287,7 @@ function opcodeDIV(stack) {
   let num2 = stack.shift();
   let result = divideHexNumbers(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeSDIV(stack) {
@@ -293,7 +295,7 @@ function opcodeSDIV(stack) {
   let num2 = stack.shift();
   let result = sdivHexNumbers(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeMOD(stack) {
@@ -301,7 +303,7 @@ function opcodeMOD(stack) {
   let num2 = stack.shift();
   let result = modHexNumbers(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeSMOD(stack) {
@@ -309,7 +311,7 @@ function opcodeSMOD(stack) {
   let num2 = stack.shift();
   let result = smodHexNumbers(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeADDMOD(stack) {
@@ -318,7 +320,7 @@ function opcodeADDMOD(stack) {
   let num3 = stack.shift();
   let result = addModHexNumbers(num1, num2, num3);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeMULMOD(stack) {
@@ -327,7 +329,7 @@ function opcodeMULMOD(stack) {
   let num3 = stack.shift();
   let result = mulModHexNumbers(num1, num2, num3);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeEXP(stack) {
@@ -335,7 +337,7 @@ function opcodeEXP(stack) {
   let base = stack.shift();
   let result = expHexNumbers(base, pow);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeSIGNEXTEND(stack) {
@@ -343,7 +345,7 @@ function opcodeSIGNEXTEND(stack) {
   let num2 = stack.shift();
   let result = signExtend(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeLT(stack) {
@@ -351,7 +353,7 @@ function opcodeLT(stack) {
   let num2 = stack.shift();
   let result = lessThan(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeGT(stack) {
@@ -359,7 +361,7 @@ function opcodeGT(stack) {
   let num2 = stack.shift();
   let result = greaterThan(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeSLT(stack) {
@@ -367,7 +369,7 @@ function opcodeSLT(stack) {
   let num2 = stack.shift();
   let result = lessThanSigned(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeSGT(stack) {
@@ -375,7 +377,7 @@ function opcodeSGT(stack) {
   let num2 = stack.shift();
   let result = greaterThanSigned(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeEQ(stack) {
@@ -383,14 +385,14 @@ function opcodeEQ(stack) {
   let num2 = stack.shift();
   let result = equalTo(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeISZERO(stack) {
   let num1 = stack.shift();
   let result = isZero(num1);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeAND(stack) {
@@ -398,7 +400,7 @@ function opcodeAND(stack) {
   let num2 = stack.shift();
   let result = bitwiseAnd(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeOR(stack) {
@@ -406,7 +408,7 @@ function opcodeOR(stack) {
   let num2 = stack.shift();
   let result = bitwiseOr(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeXOR(stack) {
@@ -414,14 +416,14 @@ function opcodeXOR(stack) {
   let num2 = stack.shift();
   let result = bitwiseXor(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeNOT(stack) {
   let num1 = stack.shift();
   let result = bitwiseNot(num1);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeSHL(stack) {
@@ -429,7 +431,7 @@ function opcodeSHL(stack) {
   let num2 = stack.shift();
   let result = shiftLeft(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeSHR(stack) {
@@ -437,7 +439,7 @@ function opcodeSHR(stack) {
   let num2 = stack.shift();
   let result = shiftRight(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeSAR(stack) {
@@ -445,7 +447,7 @@ function opcodeSAR(stack) {
   let num2 = stack.shift();
   let result = signedShiftRight(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
 }
 
 function opcodeBYTE(stack) {
@@ -453,7 +455,12 @@ function opcodeBYTE(stack) {
   let num2 = stack.shift();
   let result = byte(num1, num2);
   stack.unshift(result);
-  return { stack, pc: 0 };
+  return { stack, pc: 1 };
+}
+
+function opcodeGAS(stack) {
+  stack.unshift((BigInt(2 ** 256) - BigInt(1)).toString(16));
+  return { stack, pc: 1 };
 }
 
 module.exports = { executeOpCode };

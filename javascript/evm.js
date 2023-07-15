@@ -16,8 +16,13 @@ function evm(code) {
       success = false;
       break;
     }
-    pc++;
-    const args = code.slice(pc);
+    // return pointer if encountered PC
+    if (opcode === 0x58) {
+      stack.unshift(pc);
+      break;
+    }
+
+    const args = code.slice(pc + 1);
 
     const response = executeOpCode(opcode, stack, args);
     stack = response.stack;
