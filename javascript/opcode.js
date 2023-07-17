@@ -214,6 +214,8 @@ function executeOpCode(opcode, stack, args) {
       return upcodeSWAP(opcode, stack);
     case "0x5a":
       return opcodeGAS(stack);
+    case "0x56":
+      return opcodeJUMP(stack, args);
   }
 }
 
@@ -461,6 +463,13 @@ function opcodeBYTE(stack) {
 function opcodeGAS(stack) {
   stack.unshift((BigInt(2 ** 256) - BigInt(1)).toString(16));
   return { stack, pc: 1 };
+}
+
+function opcodeJUMP(stack, args) {
+  let num1 = stack.shift();
+  let pc = parseInt(num1, 16) - 1;
+  console.log(pc);
+  return { stack, pc };
 }
 
 module.exports = { executeOpCode };
